@@ -294,7 +294,7 @@ Section lists.
 
   Lemma repeating_repeat_list: forall A n (l: list A), n > 1 -> repeating (repeat_list n l).
   Proof.
-    econstructor. instantiate (l' := l).
+    econstructor. instantiate (1 := l).
     revert H.
     induction n; crush.
     unfold repeat_list. simpl.
@@ -311,7 +311,7 @@ Section lists.
     - destruct H.
       exists l'.
       induction H.
-      + repeat eexists. instantiate (n := 2). omega.
+      + repeat eexists. instantiate (1 := 2). omega.
         unfold repeat_list.
         simpl. autorewrite with core. reflexivity.
       + repeat deex.
@@ -435,7 +435,8 @@ Section lists.
     destruct (repeat_list n []); discriminate.
     simpl. rewrite Nat.mul_succ_r. rewrite plus_comm. remember (n + n * length l') as tl.
     destruct tl. destruct n; intuition.
-    etransitivity. instantiate (1 := n). omega. apply le_plus_l.
+    discriminate.
+    etransitivity. instantiate (1 := n). omega. rewrite Heqtl. apply le_plus_l.
   Qed.
 
   Lemma repeat_list_prefix: forall A (l: list A) n m,
@@ -661,3 +662,5 @@ Section lists.
       lengths.
       rewrite firstn_skipn. auto.
   Qed.
+
+End lists.
